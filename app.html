@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Hangman by Silvana</title>
+    <link rel="stylesheet" href="https://pyscript.net/releases/2023.11.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2023.11.1/core.js"></script>
+</head>
+
+<body>
+    <script type="py">
+        stages = ['''
+         +---+
+         |   |
+         O   |
+        /|\  |
+        / \  |
+             |
+        =========
+        ''', '''
+         +---+
+         |   |
+         O   |
+        /|\  |
+        /    |
+             |
+        =========
+        ''', '''
+         +---+
+         |   |
+         O   |
+        /|\  |
+             |
+             |
+        =========
+        ''', '''
+         +---+
+         |   |
+         O   |
+        /|   |
+             |
+             |
+        =========''', '''
+        +---+
+        |   |
+        O   |
+        |   |
+            |
+            |
+        =========
+        ''', '''
+        +---+
+        |   |
+        O   |
+            |
+            |
+            |
+        =========
+        ''', '''
+        +---+
+        |   |
+            |
+            |
+            |
+            |
+        =========
+        ''']
+    </script>
+    <script type="py">
+        logo = ''' 
+         _                                             
+        | |                                            
+        | |__   __ _ _ __   __ _ _ __ ___   __ _ _ __  
+        | '_ \ / _` | '_ \ / _` | '_ ` _ \ / _` | '_ \ 
+        | | | | (_| | | | | (_| | | | | | | (_| | | | |
+        |_| |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_|
+                            __/ |                      
+                           |___/    
+        '''
+    </script>
+    <script type="py">
+        word_list = [
+        'abruptly', 
+        'absurd', 
+        'abyss', 
+        'affix', 
+        'askew', 
+        'avenue', 
+        'awkward', 
+        'axiom', 
+        'azure', 
+        'bagpipes', 
+        'bandwagon', 
+        'banjo', 
+        'bayou', 
+        'beekeeper', 
+        'bikini', 
+        'blitz', 
+        'blizzard', 
+        'boggle', 
+        'bookworm', 
+        'boxcar', 
+        'boxful', 
+        'buckaroo', 
+        'buffalo', 
+        'buffoon', 
+        'buxom', 
+        'buzzard', 
+        'buzzing', 
+        'buzzwords', 
+        'caliph', 
+        'cobweb', 
+        'cockiness', 
+        'croquet', 
+        'crypt', 
+        'curacao', 
+        'cycle', 
+        'daiquiri', 
+        'dirndl', 
+        'disavow', 
+        'dizzying', 
+        'duplex', 
+        'dwarves', 
+        'embezzle', 
+        'equip', 
+        'espionage', 
+        'euouae', 
+        'exodus', 
+        'faking', 
+        'fishhook', 
+        'fixable', 
+        'fjord', 
+        'flapjack', 
+        'flopping', 
+        'fluffiness', 
+        'flyby', 
+        'foxglove', 
+        'frazzled', 
+        'frizzled', 
+        'fuchsia', 
+        'funny', 
+        'gabby', 
+        'galaxy', 
+        'galvanize', 
+        'gazebo', 
+        'giaour', 
+        'gizmo', 
+        'glowworm', 
+        'glyph', 
+        'gnarly', 
+        'gnostic', 
+        'gossip', 
+        'grogginess', 
+        'haiku', 
+        'haphazard', 
+        'hyphen', 
+        'iatrogenic', 
+        'icebox', 
+        'injury', 
+        'ivory', 
+        'ivy', 
+        'jackpot', 
+        'jaundice', 
+        'jawbreaker', 
+        'jaywalk', 
+        'jazziest', 
+        'jazzy', 
+        'jelly', 
+        'jigsaw', 
+        'jinx', 
+        'jiujitsu', 
+        'jockey', 
+        'jogging', 
+        'joking', 
+        'jovial', 
+        'joyful', 
+        'juicy', 
+        'jukebox', 
+        'jumbo', 
+        'kayak', 
+        'kazoo', 
+        'keyhole', 
+        'khaki', 
+        'kilobyte', 
+        'kiosk', 
+        'kitsch', 
+        'kiwifruit', 
+        'klutz', 
+        'knapsack', 
+        'larynx', 
+        'lengths', 
+        'lucky', 
+        'luxury', 
+        'lymph', 
+        'marquis', 
+        'matrix', 
+        'megahertz', 
+        'microwave', 
+        'mnemonic', 
+        'mystify', 
+        'naphtha', 
+        'nightclub', 
+        'nowadays', 
+        'numbskull', 
+        'nymph', 
+        'onyx', 
+        'ovary', 
+        'oxidize', 
+        'oxygen', 
+        'pajama', 
+        'peekaboo', 
+        'phlegm', 
+        'pixel', 
+        'pizazz', 
+        'pneumonia', 
+        'polka', 
+        'pshaw', 
+        'psyche', 
+        'puppy', 
+        'puzzling', 
+        'quartz', 
+        'queue', 
+        'quips', 
+        'quixotic', 
+        'quiz', 
+        'quizzes', 
+        'quorum', 
+        'razzmatazz', 
+        'rhubarb', 
+        'rhythm', 
+        'rickshaw', 
+        'schnapps', 
+        'scratch', 
+        'shiv', 
+        'snazzy', 
+        'sphinx', 
+        'spritz', 
+        'squawk', 
+        'staff', 
+        'strength', 
+        'strengths', 
+        'stretch', 
+        'stronghold', 
+        'stymied', 
+        'subway', 
+        'swivel', 
+        'syndrome', 
+        'thriftless', 
+        'thumbscrew', 
+        'topaz', 
+        'transcript', 
+        'transgress', 
+        'transplant', 
+        'triphthong', 
+        'twelfth', 
+        'twelfths', 
+        'unknown', 
+        'unworthy', 
+        'unzip', 
+        'uptown', 
+        'vaporize', 
+        'vixen', 
+        'vodka', 
+        'voodoo', 
+        'vortex', 
+        'voyeurism', 
+        'walkway', 
+        'waltz', 
+        'wave', 
+        'wavy', 
+        'waxy', 
+        'wellspring', 
+        'wheezy', 
+        'whiskey', 
+        'whizzing', 
+        'whomever', 
+        'wimpy', 
+        'witchcraft', 
+        'wizard', 
+        'woozy', 
+        'wristwatch', 
+        'wyvern', 
+        'xylophone', 
+        'yachtsman', 
+        'yippee', 
+        'yoked', 
+        'youthful', 
+        'yummy', 
+        'zephyr', 
+        'zigzag', 
+        'zigzagging', 
+        'zilch', 
+        'zipper', 
+        'zodiac', 
+        'zombie', 
+        ]
+    </script>
+    <script type="py">
+        # Global variables
+        round = 0
+        gussed_list = []
+        wrong_list = ""
+        _ = "_"
+        life = 7
+    </script>
+    <script type="py" terminal>
+        from pyscript import display
+        import random
+
+        print(logo)
+        print("Welcome to HangMan!")
+
+        chosen_word = random.choice(word_list)
+        list_chosen_word = list(chosen_word)
+
+        for i in range(0, len(chosen_word)):
+            gussed_list.append(_)
+
+        print(f"[TEST] The answer is {chosen_word}")
+        print("Give me a letter in a word!")
+    </script>
+    <input type="text" id="input" maxlength="1"/>
+    <button id="guess" type="submit" py-click="guess">Guess</button>
+    <script type="py">
+        from pyscript import document
+
+        def guess(event):
+            if life > 0:
+                input_text = document.querySelector("#input")
+                letter = input_text.value
+
+                global round
+                round += 1
+                display(f"Your round #{round} guess: {letter}")
+
+                for i in range(0, len(chosen_word)):
+                    if letter == chosen_word[i]:
+                        gussed_list[i] = letter
+
+                print(gussed_list)
+                print(stages[life])
+
+                if gussed_list == list_chosen_word:
+                    print("Good Job! You WIN!! :D")
+                else:
+                    if letter in chosen_word:
+                        print(f"You guessed letter {letter}. Good Job!\nThat was close!!! :D")
+                    else:
+                        global life
+                        life -= 1
+                        if life > 0:
+                            print(f"You guessed letter {letter}.\n\ah! You lose a life. You have {life} life(s) left.\nSilly You!\nJust try again. :)")
+                        else:
+                            print(f"Ah, You DIE!\nThe answer is {chosen_word}.")
+            else:
+                print("Stop trying, you are already dead! :)")
+    </script>
+    <script type="py">
+    </script>
+</body>
+
+</html>
