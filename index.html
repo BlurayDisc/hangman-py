@@ -327,6 +327,7 @@
         from pyscript import document
 
         def guess(event):
+            global life
             if life > 0:
                 input_text = document.querySelector("#input")
                 letter = input_text.value
@@ -340,7 +341,7 @@
                         gussed_list[i] = letter
 
                 print(gussed_list)
-                print(stages[life])
+                print(stages[life - 1])
 
                 if gussed_list == list_chosen_word:
                     print("Good Job! You WIN!! :D")
@@ -348,7 +349,6 @@
                     if letter in chosen_word:
                         print(f"You guessed letter {letter}. Good Job!\nThat was close!!! :D")
                     else:
-                        global life
                         life -= 1
                         if life > 0:
                             print(f"You guessed letter {letter}.\n\ah! You lose a life. You have {life} life(s) left.\nSilly You!\nJust try again. :)")
